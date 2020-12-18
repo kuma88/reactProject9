@@ -5,23 +5,45 @@ import {
   TextInput,
   StyleSheet,
   TouchableOpacity,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
+
 
 export default function LoginScreen({ navigation }) {
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Chat App</Text>
-      <Text style={styles.fieldTitle}>Email</Text>
-      <TextInput style={styles.input} />
-      <Text style={styles.fieldTitle}>Password</Text>
-      <TextInput style={styles.input} />
-      <TouchableOpacity onPress={null} style={styles.loginButton}>
-        <Text style={styles.buttonText}>Log in</Text>
-      </TouchableOpacity>
-    </View>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+
+      <View style={styles.container}>
+        <Text style={styles.title}>Chat App</Text>
+        <Text style={styles.fieldTitle}>Email</Text>
+        <TextInput
+          style={styles.input} 
+          autoCapitalize="none"
+          autoCompleteType="email"
+          autoCorrect={false}
+          keyboardType="email-address"
+        />
+
+        <Text style={styles.fieldTitle}>Password</Text>
+        <TextInput
+          style={styles.input}
+          autoCapitalize="none"
+          autoCompleteType="password"
+          autoCorrect={false}
+          secureTextEntry={true}
+        />
+
+        <TouchableOpacity onPress={null} 
+          style={styles.loginButton}>
+          <Text style={styles.buttonText}>Log in</Text>
+        </TouchableOpacity>
+      </View>
+
+    </TouchableWithoutFeedback>
+
   );
 }
-
 
 const styles = StyleSheet.create({
   container: {
@@ -45,6 +67,7 @@ const styles = StyleSheet.create({
     padding: 4,
     height: 36,
     fontSize: 18,
+    backgroundColor: "white",
   },
   loginButton: {
     backgroundColor: "green",
@@ -53,6 +76,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 18,
     marginTop: 12,
+    marginBottom: 36,
   },
   buttonText: {
     color: "white",
