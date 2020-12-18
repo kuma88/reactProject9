@@ -1,4 +1,5 @@
 import React from "react";
+import { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -8,23 +9,46 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
+import firebase from "../database/firebaseDB.js";
+
+//const db = firebase.firestore();
+const auth = firebase.auth();
 
 
 export default function LoginScreen({ navigation }) {
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errorText, setErrorText] = useState("");
+  
+  function login() {
+    auth
+    .signInWithEmailAndPassword(email, password)
+    .then((userCredential) => {
+      console.log("Signed in!");
+      navigation.navigate("Chat");
+    })
+    .catch((error) => {
+      console.log("Error!");
+      console.log(error.message);
+      setErrorText(error.message);
+    });
+  }
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-
       <View style={styles.container}>
         <Text style={styles.title}>Chat App</Text>
         <Text style={styles.fieldTitle}>Email</Text>
         <TextInput
-          style={styles.input} 
+          style={styles.input}
           autoCapitalize="none"
           autoCompleteType="email"
           autoCorrect={false}
           keyboardType="email-address"
+          value={email}
+          onChangeText={(input) => setEmail(input)}
         />
-
         <Text style={styles.fieldTitle}>Password</Text>
         <TextInput
           style={styles.input}
@@ -32,16 +56,15 @@ export default function LoginScreen({ navigation }) {
           autoCompleteType="password"
           autoCorrect={false}
           secureTextEntry={true}
+          value={password}
+          onChangeText={(input) => setPassword(input)}
         />
-
-        <TouchableOpacity onPress={null} 
-          style={styles.loginButton}>
+        <TouchableOpacity onPress={login} style={styles.loginButton}>
           <Text style={styles.buttonText}>Log in</Text>
         </TouchableOpacity>
+        <Text style={styles.errorText}>{errorText}</Text>
       </View>
-
     </TouchableWithoutFeedback>
-
   );
 }
 
@@ -82,5 +105,9 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "bold",
     fontSize: 18,
+  },
+  errorText: {
+    color: "red",
+    height: 40,
   },
 });
